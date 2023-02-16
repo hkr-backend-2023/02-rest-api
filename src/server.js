@@ -8,7 +8,11 @@ const port = 1337
 const app = express()
 
 
-// (Later: middleware)
+// Middleware
+app.use( express.json() )
+
+
+
 // Register routes
 app.use('/api/movies', movieRouter)
 // app.use('/api/actors', actorRouter)  <- if we need to add more endpoints

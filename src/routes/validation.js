@@ -14,4 +14,34 @@ function validateId(id) {
 	}
 }
 
-module.exports = { validateId }
+function isValidMovie(maybeMovie) {
+	// { title, year, id }
+	// Title: non-empty string
+	// Year: positive number
+	// Id: non-empty string
+	if( !maybeMovie || (typeof maybeMovie) !== 'object' )  {
+		return false
+	}
+	if( !isNonEmptyString(maybeMovie.title) ) {
+		return false
+	}
+	if( !isPositiveNumber(maybeMovie.year) ) {
+		return false
+	}
+	if( !isNonEmptyString(maybeMovie.id) ) {
+		return false
+	}
+	return true
+}
+
+// Truthy and falsy
+
+function isNonEmptyString(s) {
+	return (typeof s) === 'string' && s !== ''
+}
+function isPositiveNumber(n) {
+	return (typeof n) === 'number' && n >= 0
+}
+
+
+module.exports = { validateId, isValidMovie }
