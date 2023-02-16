@@ -1,6 +1,6 @@
 // Imports
 const express = require('express')
-const { getAllMovies } = require('./routes/movies')
+const movieRouter = require('./routes/movies')
 
 
 // Setup the server
@@ -10,7 +10,9 @@ const app = express()
 
 // (Later: middleware)
 // Register routes
-app.get('/api/movies', getAllMovies)
+app.use('/api/movies', movieRouter)
+// app.use('/api/actors', actorRouter)  <- if we need to add more endpoints
+
 
 
 // Start the server
