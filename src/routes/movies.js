@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { validateId, isValidMovie } = require('./validation.js')
+const { isValidId, isValidMovie } = require('./validation.js')
 
 // We use this instead of a database
 // Database will be added next lecture
@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
 	const id = req.params.id
 	console.log('GET /api/movies/:id', id)
 	
-	if( !validateId(id) ) {
+	if (!isValidId(id) ) {
 		res.sendStatus(400)  // bad request
 		return
 	}
@@ -36,7 +36,6 @@ router.get('/:id', (req, res) => {
 	res.send(movie)
 })
 
-// Next up: POST /api/movies
 router.post('/', (req, res) => {
 	// validate the body - is it a valid Movie object?
 	// if it's invalid - 400 bad request
@@ -67,7 +66,45 @@ router.post('/', (req, res) => {
 	res.sendStatus(200)
 })
 
-// TODO: post, put, delete
+//  PUT /api/movies
+//  PUT /api/movies/a2
+router.put('/:id', (req, res) => {
+	// Validate the URL parameter
+	// Validate the request body (movie object)
+	// If not ok, status 400
+	// Update database (replace object)
+	// Status 200
+	
+	const idParam = req.params.id
+	console.log('PUT /api/movies, id=', idParam)
+
+	if ( !isValidId(idParam) ) {
+		console.log('Not a valid id, id=', idParam)
+		res.sendStatus(400)
+		return
+	}
+
+	const maybeMovie = req.body
+	if( !isValidMovie(maybeMovie) ) {
+		console.log('Not a valid movie object, body=', maybeMovie)
+		res.sendStatus(400)
+		return
+	}
+
+	let movieIndex = fakeData.findIndex(movie => movie.id === idParam)
+	if( movieIndex < 0 ) {
+		console.log('Could not find a movie with id=', idParam)
+		res.sendStatus(404)
+		return
+	}
+
+	fakeData[movieIndex] = maybeMovie
+
+	res.sendStatus(200)
+})
+
+
+// TODO: put, delete
 
 // Validate backend to protect the data
 // Validate frontend to help the user

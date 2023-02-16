@@ -1,5 +1,5 @@
 
-function validateId(id) {
+function isValidId(id) {
 	// id should be a non-empty
 	if ((typeof id) !== 'string') {
 		console.log('Validate id: id is not a string:', id)
@@ -44,4 +44,4 @@ function isPositiveNumber(n) {
 }
 
 
-module.exports = { validateId, isValidMovie }
+module.exports = { isValidId, isValidMovie }
