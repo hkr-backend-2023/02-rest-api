@@ -66,8 +66,6 @@ router.post('/', (req, res) => {
 	res.sendStatus(200)
 })
 
-//  PUT /api/movies
-//  PUT /api/movies/a2
 router.put('/:id', (req, res) => {
 	// Validate the URL parameter
 	// Validate the request body (movie object)
@@ -103,8 +101,30 @@ router.put('/:id', (req, res) => {
 	res.sendStatus(200)
 })
 
+router.delete('/:id', (req, res) => {
+	const idParam = req.params.id
+	console.log('DELETE /api/movies/:id', idParam)
 
-// TODO: put, delete
+	if (!isValidId(idParam)) {
+		res.sendStatus(400)  // bad request
+		return
+	}
+
+	let movieIndex = fakeData.findIndex(movie => movie.id === idParam)
+	if (movieIndex < 0) {
+		console.log('Could not find a movie with id=', idParam)
+		res.sendStatus(404)
+		return
+	}
+
+	// Delete from database
+	// Hard way: Array.splice
+	// Easy way: Array.filter
+	fakeData = fakeData.filter(movie => movie.id !== idParam)
+	res.sendStatus(200)
+})
+
+
 
 // Validate backend to protect the data
 // Validate frontend to help the user
