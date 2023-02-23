@@ -50,7 +50,7 @@ function isValidMovie(maybeMovie) {
 	if( !isPositiveNumber(maybeMovie.year) ) {
 		return false
 	}
-	if( !isNonEmptyString(maybeMovie.id) ) {
+	if( !isValidId(maybeMovie.id) ) {
 		return false
 	}
 	return true
