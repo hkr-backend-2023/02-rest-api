@@ -1,5 +1,6 @@
 // Imports
 const express = require('express')
+const cors = require('cors')
 const movieRouter = require('./routes/movies')
 
 
@@ -11,8 +12,15 @@ const staticPath = 'src/static'
 
 
 // Middleware
-app.use( express.static(staticPath) )
+app.use( cors() )
 app.use( express.json() )
+app.use( (req, res, next) => {
+	console.log(`${req.method}  ${req.url}  `, req.body)
+	// SEND - send a status back
+	// NEXT - next middleware
+	next()
+} )
+app.use( express.static(staticPath) )
 
 
 

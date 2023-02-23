@@ -3,21 +3,9 @@ const { getAllMovies, getMovie, addMovie, deleteMovie, updateMovie } = require('
 const router = express.Router()
 const { isValidId, isValidMovie } = require('./validation.js')
 
-// We use this instead of a database
-// Database will be added next lecture
-let fakeData = [
-	{ title: 'The Shawshank Redemption', year: 1994, id: 1 },
-	{ title: 'Big Fish', year: 2003, id: 2 },
-	{ title: 'Inside out', year: 2015, id: 3},
-	{ title: 'Up', year: 2009, id: 4 },
-	{ title: 'The lives of others', year: 2006, id: 5 },
-	{ title: 'Toy story', year: 1995, id: 6 },
-	{ title: 'The incredibles', year: 2004, id: 7 }
-]
 
 
 router.get('/', async (req, res) => {
-	console.log('GET /api/movies')
 	let movies = await getAllMovies()
 	res.send(movies)  // status code 200 is default
 })
@@ -25,7 +13,6 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	// We must validate the input, because the user/frontend can't be trusted!
 	const id = Number(req.params.id)
-	console.log('GET /api/movies/:id', id)
 	
 	if (!isValidId(id) ) {
 		res.sendStatus(400)  // bad request
@@ -49,7 +36,6 @@ router.post('/', async (req, res) => {
 	// return status 200
 
 	const maybeMovie = req.body
-	console.log('POST /api/movies body=', maybeMovie)
 
 	if( !isValidMovie(maybeMovie) ) {
 		console.log('POST /api/movies, body is not a Movie object')
@@ -76,7 +62,6 @@ router.put('/:id', async (req, res) => {
 	// Status 200
 	
 	const idParam = Number(req.params.id)
-	// console.log('PUT /api/movies, id=', idParam)
 
 	if ( !isValidId(idParam) ) {
 		console.log('Not a valid id, id=', idParam)
@@ -103,8 +88,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
 	const idParam = Number(req.params.id)
-	console.log('DELETE /api/movies/:id', idParam)
-
+	
 	if (!isValidId(idParam)) {
 		res.sendStatus(400)  // bad request
 		return
