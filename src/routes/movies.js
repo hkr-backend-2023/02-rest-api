@@ -1,4 +1,5 @@
 const express = require('express')
+const { getAllMovies, getMovie } = require('../database.js')
 const router = express.Router()
 const { isValidId, isValidMovie } = require('./validation.js')
 
@@ -15,14 +16,15 @@ let fakeData = [
 ]
 
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
 	console.log('GET /api/movies')
-	res.send(fakeData)  // status code 200 is default
+	let movies = await getAllMovies()
+	res.send(movies)  // status code 200 is default
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
 	// We must validate the input, because the user/frontend can't be trusted!
-	const id = req.params.id
+	const id = Number(req.params.id)
 	console.log('GET /api/movies/:id', id)
 	
 	if (!isValidId(id) ) {
@@ -31,13 +33,12 @@ router.get('/:id', (req, res) => {
 	}
 
 	// try to find the movie object
-	let maybeMovie = fakeData.find(movie => id === movie.id)
-	if( !maybeMovie ) {
-		res.sendStatus(404)  // not found
+	let movies = await getMovie(id)
+	if( movies.length < 1 ) {
+		res.sendStatus(404)
 		return
 	}
-
-	const movie = maybeMovie
+	let movie = movies[0]
 	res.send(movie)
 })
 

@@ -1,5 +1,27 @@
 
 function isValidId(id) {
+	// id should be a positive integer or zero
+	if((typeof id) !== 'number') {
+		console.log('Validate id: id is not a number:', id)
+		return false
+	}
+	else if( isNaN(id) ) {
+		console.log('Validate id: id is NaN')
+		return false
+	}
+	else if( id < 0 ) {
+		console.log('Validate id: id is negative')
+		return false
+	}
+	else if( Math.round(id) !== id ) {
+		console.log('Validate id: id is not an integer')
+		return false
+	}
+	return true
+}
+
+// keep this, in case we need it later
+function isValidStringId(id) {
 	// id should be a non-empty
 	if ((typeof id) !== 'string') {
 		console.log('Validate id: id is not a string:', id)

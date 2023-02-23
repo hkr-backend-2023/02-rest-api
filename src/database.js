@@ -18,13 +18,17 @@ async function getAllMovies() {
 	} )
 }
 
-/*
-// This pattern of dealing with errors occurs in several Node libraries
-const exampleCallback = (error) => {
-	if( error ) {
-		// an error occurred, do something, send status code
-	} else {
-		// everything is ok
-	}
+async function getMovie(movieId) {
+	return new Promise((resolve, reject) => {
+		db.all(`SELECT * FROM Movies WHERE id=$id`, { $id: movieId }, (error, rows) => {
+			if (error) {
+				reject(error)  // failed, no data
+			} else {
+				resolve(rows)  // success
+			}
+		})
+	})
 }
-*/
+
+
+module.exports = { getAllMovies, getMovie }
