@@ -5,16 +5,7 @@ const db = new sqlite3.Database(file)
 // the Database method creates the connection
 // This connection is maintained as long as the program is running, or until we close it explicitly
 
-// Extracting the callback function from the database functions, allows us to reuse code.
-function getCallback(reject, resolve) {
-	return (error, rows=null) => {
-		if (error) {
-			reject(error)  // failed, no data
-		} else {
-			resolve(rows)  // success
-		}
-	}
-}
+
 
 
 async function getAllMovies() {
@@ -44,14 +35,42 @@ async function addMovie(movie) {
 		})
 	}
 
+	const sql = `INSERT INTO Movies (title, year) VALUES ($title, $year)`
+	const params = { $title: movie.title, $year: movie.year }
+	// With variables: easier to debug
+	// console.log('DEBUG addMovie: ', sql, params)
+
 	return new Promise((resolve, reject) => {
-		const sql = `INSERT INTO Movies (title, year) VALUES ($title, $year)`
-		const params = { $title: movie.title, $year: movie.year }
-		// With variables: easier to debug
-		// console.log('DEBUG addMovie: ', sql, params)
 		db.run(sql, params, getCallback(reject, resolve))
 	})
 }
 
 
-module.exports = { getAllMovies, getMovie, addMovie }
+async function updateMovie() {}
+
+async function deleteMovie() {}
+
+
+
+// Extracting the callback function from the database functions, allows us to reuse code.
+function getCallback(reject, resolve) {
+	return (error, rows = null) => {
+		if (error) {
+			reject(error)  // failed, no data
+		} else {
+			resolve(rows)  // success
+		}
+	}
+}
+
+
+// Alternative method (for non-SELECT queries)
+// Use like this: 
+// return promisify(`INSERT INTO Movies (title, year) VALUES ($title, $year)`, { $title: title, $year: year })
+async function promisify(sql, params) {
+	return new Promise((resolve, reject) => {
+		db.run(sql, params, getCallback(reject, resolve))
+	})
+}
+
+module.exports = { getAllMovies, getMovie, addMovie, updateMovie, deleteMovie }
