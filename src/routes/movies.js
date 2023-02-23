@@ -5,8 +5,13 @@ const { isValidId, isValidMovie } = require('./validation.js')
 // We use this instead of a database
 // Database will be added next lecture
 let fakeData = [
-	{ title: 'The Shawshank Redemption', year: 1994, id: 'a1' },
-	{ title: 'Big Fish', year: 2003, id: 'a2' }
+	{ title: 'The Shawshank Redemption', year: 1994, id: 1 },
+	{ title: 'Big Fish', year: 2003, id: 2 },
+	{ title: 'Inside out', year: 2015, id: 3},
+	{ title: 'Up', year: 2009, id: 4 },
+	{ title: 'The lives of others', year: 2006, id: 5 },
+	{ title: 'Toy story', year: 1995, id: 6 },
+	{ title: 'The incredibles', year: 2004, id: 7 }
 ]
 
 
