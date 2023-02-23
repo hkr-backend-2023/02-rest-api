@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllMovies, getMovie, addMovie, deleteMovie } = require('../database.js')
+const { getAllMovies, getMovie, addMovie, deleteMovie, updateMovie } = require('../database.js')
 const router = express.Router()
 const { isValidId, isValidMovie } = require('./validation.js')
 
@@ -68,15 +68,15 @@ router.post('/', async (req, res) => {
 	res.sendStatus(200)
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
 	// Validate the URL parameter
 	// Validate the request body (movie object)
 	// If not ok, status 400
 	// Update database (replace object)
 	// Status 200
 	
-	const idParam = req.params.id
-	console.log('PUT /api/movies, id=', idParam)
+	const idParam = Number(req.params.id)
+	// console.log('PUT /api/movies, id=', idParam)
 
 	if ( !isValidId(idParam) ) {
 		console.log('Not a valid id, id=', idParam)
@@ -91,15 +91,13 @@ router.put('/:id', (req, res) => {
 		return
 	}
 
-	let movieIndex = fakeData.findIndex(movie => movie.id === idParam)
-	if( movieIndex < 0 ) {
-		console.log('Could not find a movie with id=', idParam)
-		res.sendStatus(404)
+	let found = await getMovie(idParam)
+	if (found.length < 1) {
+		res.sendStatus(404)  // nothing to delete
 		return
 	}
 
-	fakeData[movieIndex] = maybeMovie
-
+	await updateMovie(idParam, maybeMovie)
 	res.sendStatus(200)
 })
 
