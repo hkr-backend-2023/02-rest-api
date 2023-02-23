@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllMovies, getMovie, addMovie } = require('../database.js')
+const { getAllMovies, getMovie, addMovie, deleteMovie } = require('../database.js')
 const router = express.Router()
 const { isValidId, isValidMovie } = require('./validation.js')
 
@@ -103,8 +103,8 @@ router.put('/:id', (req, res) => {
 	res.sendStatus(200)
 })
 
-router.delete('/:id', (req, res) => {
-	const idParam = req.params.id
+router.delete('/:id', async (req, res) => {
+	const idParam = Number(req.params.id)
 	console.log('DELETE /api/movies/:id', idParam)
 
 	if (!isValidId(idParam)) {
@@ -112,17 +112,12 @@ router.delete('/:id', (req, res) => {
 		return
 	}
 
-	let movieIndex = fakeData.findIndex(movie => movie.id === idParam)
-	if (movieIndex < 0) {
-		console.log('Could not find a movie with id=', idParam)
-		res.sendStatus(404)
+	let found = await getMovie(idParam)
+	if( found.length < 1 ) {
+		res.sendStatus(404)  // nothing to delete
 		return
 	}
-
-	// Delete from database
-	// Hard way: Array.splice
-	// Easy way: Array.filter
-	fakeData = fakeData.filter(movie => movie.id !== idParam)
+	await deleteMovie(idParam)
 	res.sendStatus(200)
 })
 

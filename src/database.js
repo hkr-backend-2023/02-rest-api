@@ -48,7 +48,14 @@ async function addMovie(movie) {
 
 async function updateMovie() {}
 
-async function deleteMovie() {}
+async function deleteMovie(id) {
+	const sql = `DELETE FROM Movies WHERE id=$id `
+	const params = { $id: id }
+
+	return new Promise((resolve, reject) => {
+		db.run(sql, params, getCallback(reject, resolve))
+	})
+}
 
 
 
